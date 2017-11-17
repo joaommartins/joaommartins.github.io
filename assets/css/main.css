@@ -1,4 +1,4 @@
-@import url("font-awesome.min.css");
+@import url("font-awesome.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,600");
 
 /*
@@ -216,6 +216,10 @@
 	}
 
 /* Grid */
+
+	.main-wrapper .experiences-section .item {
+        margin-bottom: 30px;
+}
 
 	.row {
 		border-bottom: solid 1px transparent;
@@ -2104,7 +2108,7 @@
 			}
 
 				#nav ul li a.active span:before {
-					color: #e27689;
+					color: #0cc682;
 				}
 
 /* Footer */
