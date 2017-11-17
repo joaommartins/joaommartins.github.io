@@ -14,8 +14,10 @@
   color: #939393;
 }
 
-.container .experiences-section .item {
-  margin-bottom: 30px;
+.container .details{
+  margin-bottom: 10px;
 }
 
-
+.container .experiences-section .item {
+  margin-bottom: 20px;
+}
