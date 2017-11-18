@@ -20,4 +20,40 @@
 
 .container .experiences-section .item {
   margin-bottom: 20px;
+    box-shadow: none;
+}
+
+.skillset .item {
+  margin-bottom: 15px;
+  overflow: hidden;
+    box-shadow: none;
+}
+.skillset .level-title {
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+.skillset .level-bar {
+  height: 12px;
+  background: #cef3e6;
+}
+.skillset .level-bar-inner {
+  height: 12px;
+  background: #0cc682;
+}
+
+@media (min-width: 992px) {
+  .skillset .level-title {
+    display: inline-block;
+    float: left;
+    width: 20%;
+    margin-bottom: 0;
+  }
+  .skillset .level-bar {
+    display: inline-block;
+    width: 75%;
+    float: left;
+    position: relative;
+    top: 5px;
+  }
 }
