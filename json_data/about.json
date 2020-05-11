@@ -1,0 +1,8 @@
+{
+    "title": "About Me",
+    "blurb": [
+        "I graduated with a Bachelor's degree in Chemistry with the University of Porto in 2011, having started my work in computational structural biology during the undergraduate studies. I later obtained the degree of master in Chemistry from the same university, researching quantum chemistry and theoretical structural biology during the Master's thesis work. Working under Prof. Kresten Lindorff-Larsen, I obtained the PhD degree in Biochemistry in 2017 with the Structural Biology and NMR lab (SBiNLab) of the University of Copenhagen.",
+        "During the early stage of my career my work has been focused on protein-protein interfaces, hotspot theory and small molecule docking under the supervision of Irina Moreira while at the University of Porto. Later, I moved to mutation studies through free energy perturbation and integration of experimental data in protein simulation while pursuing my PhD degree.",
+        "Currently working as a postdoctoral research scientist at the The Image Section of the University of Copenhagen computer science department. My research focuses on protein structure and function studies through machine learning and neural networks' methods."
+    ]
+}

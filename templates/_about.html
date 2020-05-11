@@ -1,0 +1,16 @@
+<section id="about" class="two">
+    <div class="container">
+
+        <header>
+            <i class="icon fa-user"></i>
+            <h2>{{ about['title']|default ('Please add an about title') }}</h2>
+        </header>
+
+        <!--<a href="#" class="image featured"><img src="images/pic08.jpg" alt="" /></a>-->
+        <section id="details">
+            {% for par in about['blurb'] %}
+            <p>{{par}}</p>
+            {% endfor %}
+        </section>
+    </div>
+</section>
