@@ -3,12 +3,9 @@
     "blurb": "Personal and professional code, data and visualization projects.",
     "projectsList": [
         {
-            "title": "",
-            "link": "Scientist, coder and data aficionado. Theoretical Biophysics PhD, currently working on neural networks and protein structure research."
-        },
-        {
-            "title": "Data Wrangling and Insights",
-            "blurb": "Scientist, coder and data aficionado. Theoretical Biophysics PhD, currently working on neural networks and protein structure research."
+            "title": "ProtNets",
+            "link": "https://github.com/joaommartins/ProtNets",
+            "image": "images/PN-2.jpg"
         }
     ]
 }

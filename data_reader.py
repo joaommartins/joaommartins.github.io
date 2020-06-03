@@ -12,6 +12,7 @@ def parse_jsons(json_folder):
         'header': {'title': 'No header.json file found'},
         'about': {'title': 'No about.json file found'},
         'projects': {'title': 'No projects.json file found'},
+        'experiences': {'title': 'No experiences.json file found'},
     }
     json_files = Path(json_folder).glob('*.json')
     for filename in json_files:
