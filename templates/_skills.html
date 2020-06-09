@@ -1,0 +1,19 @@
+<section id="skills" class="three">
+    <div class="container">
+        <header>
+            <i class="icon fa-cogs"></i>
+            <h2>{{ skills['title']|default ('Please add a skill title') }}</h2>
+        </header>
+        <div class="skillset">
+            {% for skill in skills['skillsList'] %}
+            <div class="item">
+                <h3 class="level-title">{{ skill['title']|default ('Please add a skill') }}</h3>
+                <div class="level-bar">
+                <div class="level-bar-inner" data-level="{{ skill['level']|default ('Please add a skill level') }}%">
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

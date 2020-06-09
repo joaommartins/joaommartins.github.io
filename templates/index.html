@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--
+	Prologue by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>João M. Martins Research</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+        <link rel="stylesheet" href="assets/css/academicons.css"/>
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+        <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+	</head>
+	<body>
+
+		<!-- Header -->
+			<div id="header">
+
+				<div class="top">
+
+					<!-- Logo -->
+						<div id="logo">
+							<span class="image avatar48"><img src="images/avatar.jpg" alt="" /></span>
+							<h1 id="title">João M. Martins</h1>
+							<p>Postdoctoral Research Scientist</p>
+						</div>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<!--
+
+								Prologue's nav expects links in one of two formats:
+
+								1. Hash link (scrolls to a different section within the page)
+
+								   <li><a href="#foobar" id="foobar-link" class="icon fa-whatever-icon-you-want skel-layers-ignoreHref"><span class="label">Foobar</span></a></li>
+
+								2. Standard link (sends the user to another page/site)
+
+								   <li><a href="http://foobar.tld" id="foobar-link" class="icon fa-whatever-icon-you-want"><span class="label">Foobar</span></a></li>
+
+							-->
+							<ul>
+								<li><a href="#top" id="top-link" class="skel-layers-ignoreHref"><span class="icon fa-home">Intro</span></a></li>
+                                <li><a href="#about" id="about-link" class="skel-layers-ignoreHref"><span class="icon fa-user">About Me</span></a></li>
+                                <li><a href="#projects" id="projects-link" class="skel-layers-ignoreHref"><span class="icon fa-code">Projects</span></a></li>
+                                <li><a href="#experiences" id="experiences-link" class="skel-layers-ignoreHref"><span class="icon fa-briefcase">Experiences</span></a></li>
+                                <li><a href="#education" id="education-link" class="skel-layers-ignoreHref"><span class="icon fa-graduation-cap">Education</span></a></li>
+                                <li><a href="#skills" id="skills-link" class="skel-layers-ignoreHref"><span class="icon fa-cogs">Skills</span></a></li>
+								<li><a href="#publications" id="publications-link" class="skel-layers-ignoreHref"><span class="icon fa-file-text-o">Publications</span></a></li>
+							</ul>
+						</nav>
+
+				</div>
+
+				<div class="bottom">
+
+					<!-- Social Icons -->
+						<ul class="icons">
+							<li><a href="http://diku.dk/english/staff/?pure=en/persons/474851" class="icon fa-user"><span class="label">Workpage</span></a></li>
+                            <li><a href="https://www.linkedin.com/in/martinsjm/" class="icon fa-linkedin-square"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://www.researchgate.net/profile/Joao_Martins5" class="ai ai-researchgate-square"><span class="label"></span></a></li>
+							<!--<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>-->
+							<li><a href="https://github.com/joaommartins" class="icon fa-github"><span class="label">Github</span></a></li>
+							<!--<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>-->
+							<li><a href="mailto:jmartins@di.ku.dk" class="icon fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+
+				</div>
+
+			</div>
+
+		<!-- Main -->
+			<div id="main">
+                {% include '_intro.html' %}
+				<!-- About Me -->
+                {% include '_about.html' %}
+                <!-- Projects -->
+                {% include '_projects.html' %}
+                <!-- Experiences -->
+                {% include '_experiences.html' %}
+                <!-- Education -->
+                {% include '_education.html' %}
+                <!-- Skills -->
+                {% include '_skills.html' %}
+                <!-- Publications -->
+                {% include '_publications.html' %}
+			</div>
+
+		<!-- Footer -->
+			<div id="footer">
+
+				<!-- Copyright -->
+					<ul class="copyright">
+						<li>&copy; João M. Martins. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollzer.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+        	<!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109833159-1"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'UA-109833159-1');
+            </script>
+
+
+	</body>
+</html>

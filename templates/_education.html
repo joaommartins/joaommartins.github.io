@@ -1,0 +1,30 @@
+<section id="education" class="two">
+    <div class="container">
+
+        <header>
+            <i class="fa fa-graduation-cap"></i>
+            <h2>{{ education['title']|default ('Please add an education title') }}</h2>
+        </header>
+
+        <section class="section experiences-section">
+            {% for degree in education['experiencesList'] %}
+            <div class="item">
+                <div class="meta">
+                    <div class="upper-row">
+                        <h3 class="job-title">{{ degree['title']|default ('Please add a degree title') }}</h3>
+                        <div class="time">{{ degree['year']|default ('Please add an education year') }}</div>
+                    </div><!--//upper-row-->
+                    <div class="company">{{ degree['school']|default ('Please add a school') }}</div>
+                </div><!--//meta-->
+                <hr width="25%">
+                <div class="details">
+                    {% for detail in degree['details'] %}
+                    <p>{{ detail|default ('Please add degree details') }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        </section>
+
+    </div>
+</section>

@@ -1,0 +1,11 @@
+{ 
+    "title": "Projects",
+    "blurb": "Personal and professional code, data and visualization projects.",
+    "projectsList": [
+        {
+            "title": "ProtNets",
+            "link": "https://github.com/joaommartins/ProtNets",
+            "image": "images/PN-2.jpg"
+        }
+    ]
+}

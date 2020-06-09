@@ -1,0 +1,32 @@
+{
+    "title": "Education",
+    "experiencesList": [
+        {
+            "title": "PhD in Biochemistry",
+            "dates": "2017",
+            "company": "Department of Biology, University of Copenhagen (DIKU), Denmark",
+            "details": [
+                "Thesis title: Computational Studies of Drug Resistance Investigating Binding Affinities and Structural Ensembles of Proteins",
+                "PhD fellow position with the Structural Biology and NMR group at the University of Copenhagen. Research focused on protein-drug interactions, drug resistance and development of software solutions for bridging experimental and theoretical analysis of protein ensembles."
+            ]
+        },
+        {
+            "title": "Master of Science (Chemistry)",
+            "dates": "2012",
+            "company": "University of Porto, Portugal",
+            "details": [
+                "Thesis title: Computational Study of Electronic and Structural Properties of Molecular Species in Confined Spaces",
+                "“Confinement effects over the energetic profile of a Menshutkin S<sub>N</sub>2 reaction, a computational study”, under the tutelage of Dr. Alexandre Magalhães, involved studying the effect of confinement inside carbon nanotubes over a S<sub>N</sub>2 Menshutkin reaction. This project involved using ONIOM QM/MM, PCM and various other quantum methodologies."
+            ]
+        },
+        {
+            "title": "Bachelor of Science (Chemistry)",
+            "dates": "2011",
+            "company": "University of Porto, Portugal",
+            "details": [
+                "Thesis title: Computational determination of the three-dimensional structures of important protein complexes involved in HIV-1 cellular entrance",
+                "Bachelor's degree, with the final research project on “Computational determination of the three-dimensional structures of important protein complexes involved in HIV-1 cellular entrance”. This project was developed with Dr. Irina Moreira and Dr. Maria João Ramos and involved extensive protein-ligand docking, protein-protein docking and various other structural bioinformatics methods."
+            ]
+        }
+    ]
+}
