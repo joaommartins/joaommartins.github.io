@@ -13,12 +13,14 @@ def parse_jsons(json_folder):
         'about': {'title': 'No about.json file found'},
         'projects': {'title': 'No projects.json file found'},
         'experiences': {'title': 'No experiences.json file found'},
-        'education': {'title': 'No education.json file found'}
+        'education': {'title': 'No education.json file found'},
+        'skills': {'title': 'No skills.json file found'},
+        'publications': {'title': 'No publications.json file found'}
     }
     json_files = Path(json_folder).glob('*.json')
     for filename in json_files:
         if filename.stem in page_data.keys():
-            with open(filename) as json_file:
+            with open(filename, encoding="utf-8") as json_file:
                 file_contents = json.load(json_file)
             page_data.update({filename.stem: file_contents})
         else:

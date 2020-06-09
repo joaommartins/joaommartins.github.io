@@ -1,0 +1,33 @@
+{
+    "title": "Skills",
+    "skillsList": [
+        {
+            "title": "Chemistry and Biochemistry",
+            "level": "95"
+        },
+        {
+            "title": "Biophysics & Structural Biology",
+            "level": "95"
+        },
+        {
+            "title": "Python",
+            "level": "95"
+        },
+        {
+            "title": "Data Science",
+            "level": "85"
+        },
+        {
+            "title": "Machine Learning",
+            "level": "80"
+        },
+        {
+            "title": "Data Visualization",
+            "level": "70"
+        },
+        {
+            "title": "Web Development",
+            "level": "65"
+        }
+    ]
+}

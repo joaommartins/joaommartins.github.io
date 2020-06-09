@@ -21,9 +21,10 @@
                     {% for detail in degree['details'] %}
                     <p>{{ detail|default ('Please add degree details') }}
                     {% endfor %}
-                </div><!--//details-->
-            </div><!--//item-->
-        </section><!--//section-->
+                </div>
+            </div>
+        {% endfor %}
+        </section>
 
     </div>
 </section>
