@@ -1,0 +1,83 @@
+/**
+ * Variables
+ */
+
+// Colors
+//$color-base: #222222;
+//$color-primary: #5D93FF;
+//$color-secondary: #F7A046;
+
+:root {
+  $default-text: hsl(220, 24%, 20%);
+  --mono-1: $default-text; // default text
+  --mono-2: lighten($default-text, 30%);
+  --mono-3: darken($default-text, 12%);
+
+  --hue-1: hsl(208, 100%, 56%); // blue
+  --hue-2: hsl(132,  48%, 48%); // green
+  --hue-3: hsl( 40,  60%, 52%); // orange
+  --hue-4: #D831B0;             // pink
+  --hue-5: #EBDD5B;             // yellow
+
+  --bg-color: hsl(220, 24%, 92%);
+}
+
+[theme="dark"] {
+  --mono-1: hsl(220, 14%, 71%); // default text
+  --mono-2: hsl(220,  9%, 55%);
+  --mono-3: hsl(220, 10%, 40%);
+
+  --hue-1: hsl(187, 47%, 55%); // <-cyan;
+  --hue-2: hsl(207, 82%, 66%); // <-blue;
+  --hue-3: hsl(286, 60%, 67%); // <-purple
+  --hue-4: hsl( 95, 38%, 62%); // <-green
+  --hue-5: hsl(355, 65%, 65%); // <-red 1
+  --hue-6: hsl( 29, 54%, 61%); // <-orange 1
+
+  --bg-color: hsl(220, 13%, 18%);
+}
+
+$color-base: #abb2bf;
+$color-primary: #d19a66;
+$color-secondary: #5c6370;
+
+$color-base-light: #383a42;
+$color-primary-light: #FFE792;
+$color-secondary-light: #9D550FB0;
+
+$color-white: #FFF;
+$color-gray: lighten($color-base, 40%);
+$color-gray-border: lighten($color-base, 77%);
+$color-gray-bg: lighten($color-base, 79%);
+
+// Typographic
+$typographic-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+$typographic-root-font-size: 100;
+$typographic-base-font-size: 16px;
+$typographic-small-font-size: 14px;
+
+$typographic-base-line-height: 1.625;
+
+$typographic-base-font-color: $color-base;
+$typographic-link-p-font-color: $color-primary;
+$typographic-link-s-font-color: $color-secondary;
+
+$typographic-base-font-color-light: $color-base-light;
+$typographic-link-p-font-color-light: $color-primary-light;
+$typographic-link-s-font-color-light: $color-secondary-light;
+
+$typographic-leading: round(16 * ($typographic-root-font-size / 100) * $typographic-base-line-height);
+
+// Buttons
+$button-height: 35px;
+$button-border-radius: 20px;
+
+// Layout
+$layout-post-single-width: 945px;
+$layout-post-width: $layout-post-single-width - 305px;
+
+$layout-width: 1070px;
+$layout-breakpoint-sm: 685px;
+$layout-breakpoint-md: 960px;
+$layout-breakpoint-lg: 1100px;
