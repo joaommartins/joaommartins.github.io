@@ -1,7 +1,7 @@
 {
-  "version": "3.0.7",
-  "name": "gatsby-starter-lumen",
-  "description": "A minimal, lightweight and mobile-first starter for creating blazing-fast static blogs",
+  "version": "0.0.1",
+  "name": "personal-blog",
+  "description": "A minimal, lightweight and mobile-first blog based on gatsby-starter-lumen",
   "main": "n/a",
   "scripts": {
     "develop": "yarn run clean && gatsby develop",
@@ -12,8 +12,8 @@
     "lint:scss": "stylelint \"src/**/*.scss\"",
     "lint": "concurrently \"yarn run lint:js\" \"yarn run lint:scss\""
   },
-  "repository": "https://github.com/alxshelepenok/gatsby-starter-lumen",
-  "author": "Alexander Shelepenok <alxshelepenok@gmail.com>",
+  "repository": "https://github.com/joaommartins/joaommartins.github.io",
+  "author": "João M. Martins <martins.joaomiguel@gmail.com>",
   "license": "MIT",
   "keywords": [
     "gatsby",
@@ -89,7 +89,6 @@
     "eslint": "7.13.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jest": "24.1.0",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.21.5",
     "eslint-watch": "7.0.0",
@@ -97,8 +96,6 @@
     "flow-typed": "^3.2.1",
     "gh-pages": "3.1.0",
     "identity-obj-proxy": "3.0.0",
-    "jest": "26.6.3",
-    "jest-cli": "26.6.3",
     "lost": "8.3.1",
     "postcss-pxtorem": "5.1.1",
     "react-test-renderer": "17.0.1",
