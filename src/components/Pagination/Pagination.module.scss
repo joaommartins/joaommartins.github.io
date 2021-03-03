@@ -16,12 +16,12 @@
 
       &:hover,
       &:focus {
-        color: $color-primary;
+        color: $color-link;
       }
 
       &--disable {
         pointer-events: none;
-        color: lighten($color-gray, 20%);
+        color: $color-gray-border;
       }
 
     }
@@ -39,12 +39,12 @@
 
       &:hover,
       &:focus {
-        color: $color-primary;
+        color: $color-link;
       }
 
       &--disable {
         pointer-events: none;
-        color: lighten($color-gray, 20%);
+        color: $color-gray-border;
       }
 
     }

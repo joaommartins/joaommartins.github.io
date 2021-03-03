@@ -1,10 +1,8 @@
-// @flow strict
 import React from 'react';
 import Author from './Author';
 import Contacts from './Contacts';
 import Copyright from './Copyright';
 import Menu from './Menu';
-// import DarkModeToggler from '../DarkModeToggler';
 import styles from './Sidebar.module.scss';
 import { useSiteMetadata } from '../../hooks';
 import DarkModeToggler from '../DarkModeToggler';
@@ -21,8 +19,6 @@ const Sidebar = ({ isIndex }: Props) => {
       <div className={styles['sidebar__inner']}>
         <Author author={author} isIndex={isIndex} />
         <Menu menu={menu} />
-      </div>
-      <div>
         <DarkModeToggler className={styles['sidebar__toggler']}/>
         <Contacts contacts={author.contacts} />
         <Copyright copyright={copyright} />

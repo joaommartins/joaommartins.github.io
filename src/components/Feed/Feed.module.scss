@@ -55,7 +55,7 @@
 
           &:hover,
           &:focus {
-            color: $color-primary;
+            color: $color-link;
           }
 
         }
@@ -66,12 +66,12 @@
 
     &-readmore {
       font-size: $typographic-base-font-size;
-      color: $color-primary;
+      color: $color-link;
 
       &:hover,
       &:focus {
-        color: $color-primary;
-        border-bottom: 1px solid $color-primary;
+        color: $color-link;
+        border-bottom: 1px solid $color-link;
       }
 
     }
