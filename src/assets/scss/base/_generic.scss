@@ -6,17 +6,8 @@ html {
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: $color-bg;
   color: $typographic-base-font-color;
-  //&.dark {
-  //  background-color: #282c34;
-  //  color: $typographic-base-font-color;
-  //}
-  //&.light {
-  //  background-color: #fafafa;
-  //  color: $typographic-base-font-color-light;
-  //}
-
   margin: 0 0 0 calc(100vw - 100%);
   font-family: $typographic-font-family;
   line-height: $typographic-base-line-height;

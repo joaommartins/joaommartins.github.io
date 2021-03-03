@@ -3,11 +3,38 @@
 
 .sidebar {
     width: 100%;
+
     &__inner {
         position: relative;
         padding: 25px 20px 0;
     }
+
+    &__toggler {
+        font-weight: bold;
+        @include margin-bottom(1);
+    }
+
+    label {
+        cursor: pointer;
+        display: block;
+        max-width: 90px;
+        height: $button-height;
+        padding: 0 24px;
+        line-height: $button-height;
+        text-align: center;
+        color: $color-base;
+        border: 1px solid $color-gray-border;
+        border-radius: $button-border-radius;
+        font-size: $typographic-base-font-size;
+        font-weight: normal;
+
+        &:hover,
+        &:focus {
+            color: $color-link;
+        }
+    }
 }
+
 
 @include breakpoint-sm {
     .sidebar {
@@ -18,7 +45,7 @@
             padding: 30px 20px 0;
             &:after {
                 background: $color-gray-border;
-                background: linear-gradient(to bottom, $color-gray-border 0%, $color-gray-border 48%, $color-white 100%);
+                background: linear-gradient(to bottom, $color-gray-border 0%, $color-gray-border 48%, $color-bg 100%);
                 position: absolute;
                 content: '';
                 width: 1px;
@@ -38,11 +65,8 @@
             padding: 40px;
         }
         &__toggler {
-            font-weight: bold;
-            @include margin(0.5, 0, 0.5, 0);
+            padding: 20px 0 ;
         }
-    }
-    label {
-        cursor: pointer;
+
     }
 }
