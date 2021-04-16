@@ -9,17 +9,17 @@ const katexStylesheet = require('!css-loader!../static/css/katex/katex.min.css')
 const applyDarkModeClass = `
 (function() {
   const mode = localStorage.getItem('theme');
-  if (mode !== null) {
-    document.documentElement.setAttribute('theme', mode);
+  if (mode !== null && ['light', 'dark'].includes(mode)) {
+    document.documentElement.dataset.theme = mode;
     return;
   }
 
   const mql = window.matchMedia('(prefers-color-scheme: dark)');
   const hasMediaQueryPreference = typeof mql.matches === 'boolean';
   if (hasMediaQueryPreference && mql.matches === true) {
-    document.documentElement.setAttribute('theme', 'dark');
+    document.documentElement.dataset.theme = 'dark';
   } else {
-    document.documentElement.setAttribute('theme', 'light');
+    document.documentElement.dataset.theme = 'light'
   }
 })();
 `;
