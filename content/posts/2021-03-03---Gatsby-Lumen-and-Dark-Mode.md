@@ -56,8 +56,71 @@ with a mixed approach, keeping Sass variables in the different components and as
 properties. 
 
 This has its drawbacks too, as we can't use Sass color module functions, but the very limited number of colors and page
-types of the template allows for pre-setting all the colors we will use.
+types of the template allows for pre-setting all the colors we will use. It also has its benefits, since we can 
+directly use [CSS attribute selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors) and 
+HMTL5's [data-* global attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*). We can 
+use an attribute selector dependent on our data-* attribute, changing the color variables depending on which `theme` 
+data attribute we select.
 
+## Media queries and setting a mode
+> Media Queries allow authors to test and query values or features of the user agent or display device, independent of
+> the document being rendered. They are used in the CSS @media rule to conditionally apply styles to a document, and in
+> various other contexts and languages, such as HTML and JavaScript.
+>
+> — [Media Queries Level 5 specification](https://drafts.csswg.org/mediaqueries-5/#prefers-color-scheme)
+
+We're connecting another recent feature of CSS formatting, media queries and, more specifically, the `prefers-color-scheme`
+media query that informs the browser of the client's OS dark/light mode preference. With this I can infer the reader's
+preference for a dark or light mode and use that preference to style the page accordingly. 
+
+```javascript
+const mql = window.matchMedia('(prefers-color-scheme: dark)');
+const hasMediaQueryPreference = typeof mql.matches === 'boolean';
+if (hasMediaQueryPreference && mql.matches === true) {
+  document.documentElement.dataset.theme = 'dark';
+} else {
+  document.documentElement.dataset.theme = 'light'
+}
+```
+
+`mql` should hold a boolean, indicating if the user's OS color preference is dark mode. Like I mentioned before, I'm 
+using data-* attributes, which means that we can use the `dataset` object of `documentElement`. Subsequently, I set my 
+alternative CSS selector to use these data-* attribute:
+
+```sass
+// Colors, using css variables
+:root {
+  // Based on One Light: https://github.com/atom/one-light-syntax/blob/master/styles/colors.less
+  --bg-color: rgb(231, 230, 223);
+
+  --base: rgb(11, 23, 82);
+  --primary: rgb(134, 69, 28);
+  --secondary: rgba(11, 23, 82, 70%);
+  --gray: hsl(230, 23%, 23%);
+  --gray-border: hsl(230, 77%, 13%);
+}
+
+[data-theme="dark"] {
+  // Based on One Dark: https://github.com/atom/atom/blob/master/packages/one-dark-syntax/styles/colors.less
+  --bg-color: hsl(220, 13%, 18%);
+
+  --base: hsl(219, 14%, 71%); // mono-1
+  --primary: hsl( 29, 54%, 61%); // orange-1
+  --secondary: hsl(220, 9%, 55%); // mono-2
+  --gray-border: hsl(220, 10%, 40%); // mono-3
+  --gray: hsl(0, 0%, 100%); // white
+}
+```
+
+As discussed before, depending on the root data attribute, the page will either display the default CSS colors or the 
+dark mode colors.
+
+
+## Flash of Unstyled Content
+The [flash of unstyled content \(FOUC\)](https://web.archive.org/web/20150513055019/http://www.bluerobot.com/web/css/fouc.asp/) 
+is a fairly annoying consequence of sequential DOM building, where a browser will display 
+HTML without having fully loaded its CSS. It is especially noticeable on dark/light mode pages when the default flashing 
+page mode is different from the expected OS color mode, and getting around this issue is fairly easy with Gatsby.
 
 
 

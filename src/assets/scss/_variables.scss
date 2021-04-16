@@ -4,7 +4,7 @@
 
 // Colors, using css variables
 :root {
-  // Base on One Light: https://github.com/atom/one-light-syntax/blob/master/styles/colors.less
+  // Based on One Light: https://github.com/atom/one-light-syntax/blob/master/styles/colors.less
   --bg-color: rgb(231, 230, 223);
 
   --base: rgb(11, 23, 82);
@@ -19,7 +19,7 @@
   --bg-color: hsl(220, 13%, 18%);
 
   --base: hsl(219, 14%, 71%); // mono-1
-  --primary: hsl( 29, 54%, 61%); // <-orange 1
+  --primary: hsl( 29, 54%, 61%); // orange 1
   --secondary: hsl(220, 9%, 55%); // mono-2
   --gray-border: hsl(220, 10%, 40%); // mono-3
   --gray: hsl(0, 0%, 100%); // white
