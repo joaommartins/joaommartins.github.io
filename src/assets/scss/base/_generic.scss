@@ -158,6 +158,10 @@ figcaption {
     max-width: 310px;
     @include padding(0, 1, 0, 1);
   }
+  figure.float-center {
+    // the width works, but doesn't scale height, so empty for now
+    //max-width: $layout-post-single-width;
+  }
 
   .float-right {
     float: right;
@@ -166,5 +170,4 @@ figcaption {
   .float-left {
     float: left;
   }
-
 }

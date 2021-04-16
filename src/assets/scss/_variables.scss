@@ -14,7 +14,7 @@
   --gray-border: hsl(230, 77%, 13%);
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   // Based on One Dark: https://github.com/atom/atom/blob/master/packages/one-dark-syntax/styles/colors.less
   --bg-color: hsl(220, 13%, 18%);
 

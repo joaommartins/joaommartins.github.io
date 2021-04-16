@@ -1,5 +1,3 @@
-
-
 const siteConfig = require('./config.js');
 const postCssPlugins = require('./postcss-config.js');
 
@@ -113,18 +111,43 @@ module.exports = {
             resolve: 'gatsby-remark-images',
             options: {
               maxWidth: 960,
-              withWebp: true
+              withWebp: false,
+              linkImagesToOriginal: false,
+              quality: 90
             }
           },
           {
             resolve: 'gatsby-remark-responsive-iframe',
             options: { wrapperStyle: 'margin-bottom: 1.0725rem' }
           },
+          {
+            resolve: 'gatsby-remark-images-medium-zoom', // Important!
+            options: {
+              margin: 40,
+              background: 'var(--bg-color)',
+              scrollOffset: 40
+            }
+          },
+          {
+            resolve: 'gatsby-remark-footnotes',
+            options: {
+              footnoteBackRefPreviousElementDisplay: 'inline',
+              footnoteBackRefDisplay: 'inline',
+              footnoteBackRefInnerText: '^',
+              footnoteBackRefAnchorStyle: 'text-decoration: none;',
+              // footnoteBackRefInnerTextStartPosition: "front",
+              // useFootnoteMarkerText: true, // Defaults to false
+              useCustomDivider: '<hr/><strong>Footnotes:</strong>' // Defaults to <hr/>
+            }
+          },
+          'gatsby-remark-numbered-footnotes',
           'gatsby-remark-autolink-headers',
           'gatsby-remark-prismjs',
           'gatsby-remark-copy-linked-files',
           'gatsby-remark-smartypants',
-          'gatsby-remark-external-links'
+          'gatsby-remark-external-links',
+          'gatsby-remark-embedder',
+          'gatsby-remark-social-cards'
         ]
       }
     },

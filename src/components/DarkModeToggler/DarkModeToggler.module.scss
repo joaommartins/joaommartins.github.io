@@ -1,0 +1,33 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.toggler {
+  font-weight: bold;
+  @include margin-bottom(1);
+  label {
+    cursor: pointer;
+    display: block;
+    max-width: 90px;
+    height: $button-height;
+    padding: 0 24px;
+    line-height: $button-height;
+    text-align: center;
+    color: $color-base;
+    border: 1px solid $color-gray-border;
+    border-radius: $button-border-radius;
+    font-size: $typographic-base-font-size;
+    font-weight: normal;
+
+    &:hover,
+    &:focus {
+      color: $color-link;
+    }
+  }
+}
+
+
+@include breakpoint-md {
+  .toggler {
+      padding: 20px 0 ;
+    }
+}
