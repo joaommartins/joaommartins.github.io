@@ -1,12 +1,10 @@
-
-
 const React = require('react');
 const siteConfig = require('../config.js');
 
 // eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
 const katexStylesheet = require('!css-loader!../static/css/katex/katex.min.css');
 
-const applyDarkModeClass = `
+const applyDarkModeFunc = `
 (function() {
   const mode = localStorage.getItem('theme');
   if (mode !== null && ['light', 'dark'].includes(mode)) {
@@ -38,7 +36,7 @@ const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
   setPreBodyComponents([
     React.createElement('script', {
       dangerouslySetInnerHTML: {
-        __html: applyDarkModeClass,
+        __html: applyDarkModeFunc,
       },
     }),
   ]);

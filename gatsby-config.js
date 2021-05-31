@@ -121,7 +121,7 @@ module.exports = {
             options: { wrapperStyle: 'margin-bottom: 1.0725rem' }
           },
           {
-            resolve: 'gatsby-remark-images-medium-zoom', // Important!
+            resolve: 'gatsby-remark-images-medium-zoom',
             options: {
               margin: 40,
               background: 'var(--bg-color)',
