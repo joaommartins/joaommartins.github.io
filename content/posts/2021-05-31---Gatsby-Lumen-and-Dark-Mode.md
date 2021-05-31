@@ -215,6 +215,16 @@ This is all I needed to do to make this work, feel free to replicate and modify 
 functionality. I don't have any comments section on this blog (on purpose), so feel free to open an issue on this page's
 repo or message me through LinkedIn.
 
+### Post Script 1
+
+While building and deploying I found a issue with SSR and the React component I built. The issue is that the browser DOM 
+methods aren't available when building on server side, but following 
+[Gatsby's documentation](https://www.gatsbyjs.com/docs/using-client-side-only-packages/#workaround-4-use-reactlazy-and-suspense-on-client-side-only) 
+we can work around the problem. To not have to add another dependency I decided to use React component lazy loading 
+and check for the availability of the DOM methods, following the workaround 4 in the linked page.
+
+These changes were introduced in the component that loads that offending component, `Sidebar.js`, and building now works
+correctly, as well as in development mode.
 
 [^1]:
     The code is still available under the [gh-page-staticjinja-based](https://github.com/joaommartins/joaommartins.github.io/tree/gh-page-staticjinja-based) branch backing this repo.
