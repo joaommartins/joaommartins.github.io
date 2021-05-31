@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Learnings and Code]]></title><description><![CDATA[Things that I enjoy playing with, processes that I keep coming back to and learnings that I feel like sharing.]]></description><link>https://joammartins.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 31 May 2021 19:12:56 GMT</lastBuildDate><item><title><![CDATA[Gatsby, Lumen and Dark Mode]]></title><description><![CDATA[How I implemented dark mode in a Gatsby Lumen using CSS variables]]></description><link>https://joammartins.github.io/posts/gatsby-lumen-and-dark-mode</link><guid isPermaLink="false">https://joammartins.github.io/posts/gatsby-lumen-and-dark-mode</guid><pubDate>Mon, 31 May 2021 20:04:37 GMT</pubDate><content:encoded>&lt;h1 id=&quot;python-based-static-webpage&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#python-based-static-webpage&quot; aria-label=&quot;python based static webpage permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Python-based static webpage&lt;/h1&gt;
+&lt;p&gt;Previously, my web presence was composed of a static page built using staticjinja, an HTML5 UP template, and
+my own json parsing logic to build the different elements displayed. Back when I made it I had little experience with
+Javascript and no wish or need to update it continually as one does with a blog.&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a href=&quot;#fn-1&quot; class=&quot;footnote-ref&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; It looked something like this:&lt;/p&gt;
+&lt;figure class=&quot;float-center&quot;&gt;
+	&lt;span class=&quot;gatsby-resp-image-wrapper&quot; style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 960px; &quot;&gt;
+      &lt;span class=&quot;gatsby-resp-image-background-image&quot; style=&quot;padding-bottom: 43.75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsTAAALEwEAmpwYAAACFElEQVQoz02QSU8UURSF+2/YIthD9chsza+rq7EZFmgCLYmogDKI2AaX/DL3unWDCQnVzLBUIggyB8jnrWqnSk5u7nv3nvrOi1mO4oHl0tVroI+P405MYA8PY5V9rN5ejEwGvbUV/U4cPR7HaGvDyGYx5c6uVHAeP8J9/gz1eg71fpFYttiBliui5dvRX0zgTk9jj4xgVauYponq7sYrFPDSGl4qTUmT2tGBb1nYJYU9NIQzNiZ7r1D1OrF7iTRtSY1kJo8x9RI1P496Oo4SSscrU7Ft+np6qIjpw3yBSjZHRQyrcq5cF3egn1KthpqcRL2ZJxYapbKFiNCcmUW9q+NNTVGuPcEbGESFi52d+MUivsT3M1k8iexK7wmlJ0l8SVQKY8/OEEtoOdJimJbY+uwczuIilhiao6OY1X4MiW3IsplKYbS0YMTvRlVPJNCLBQzLlLkq1ugIjlBGhn8I3bd1+paW8BcWKMtlWf4cEpTCt2xvR8n7uWKkkkmUUJa6uvBch/LgoCSq4QtIFDmUli/y4eMntvf3Wd3bIwi1s0OwtUWwsUFjfZ3VICBoNAiCRrOurRHIebC5SbC9TWN3NzRsEqZzBZZXVgi/s6srLq6vubi5aer2lnPpD09O+Hl5GfV/dXP7b04UEd5PZwmjf17+wqUM/Tg95ej8nGPR0dlZVL8fH/P14IBvh4fNM9HR//o9/wsyEpdWAoOMJwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&quot;gatsby-resp-image-image&quot; alt=&quot;Old website look&quot; title=&quot;Old website look&quot; src=&quot;/static/83dd1c750330984f5183481dc8b14661/7d769/old_website.png&quot; srcset=&quot;/static/83dd1c750330984f5183481dc8b14661/5243c/old_website.png 240w,
+/static/83dd1c750330984f5183481dc8b14661/ab158/old_website.png 480w,
+/static/83dd1c750330984f5183481dc8b14661/7d769/old_website.png 960w,
+/static/83dd1c750330984f5183481dc8b14661/87339/old_website.png 1440w,
+/static/83dd1c750330984f5183481dc8b14661/f52e1/old_website.png 1831w&quot; sizes=&quot;(max-width: 960px) 100vw, 960px&quot; style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot; loading=&quot;lazy&quot;&gt;
+    &lt;/span&gt;
+	&lt;figcaption&gt;Old website look.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;It worked well as I didn’t have the need to update it often, but perhaps leading to it being usually very out-of-date as
+I changed projects and workplaces.
+Adding to this, the advent — or should I say return? — of blogging and developer diaries made me want to start my own
+blog.
+This would be where I share what I learn along the way, some tricks and tips on Python and development strategies
+that seem to work for me. &lt;/p&gt;
+&lt;h1 id=&quot;javascript-static-site-generators&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#javascript-static-site-generators&quot; aria-label=&quot;javascript static site generators permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Javascript static site generators&lt;/h1&gt;
+&lt;p&gt;While Medium seems to be the platform of choice for these kinds of blogging, I’m a proponent of free open
+source software and of learning-by-doing, so this was a good opportunity to learn some more Javascript, React and
+Gatsby, an open source static site generator with good Markdown support.&lt;/p&gt;
+&lt;h2 id=&quot;making-it-mine&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#making-it-mine&quot; aria-label=&quot;making it mine permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Making it mine&lt;/h2&gt;
+&lt;p&gt;I have always had an obsessive relationship with tinkering and making my digital experiences as close to my liking as
+possible. A good example is &lt;a href=&quot;https://darkreader.org/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Dark Reader&lt;/a&gt;, an open source browser extension that &lt;em&gt;“inverts brightness
+of web pages and aims to reduce eyestrain while you browse the web”&lt;/em&gt;, which I currently use for handling pages that don’t
+offer a native dark mode.&lt;/p&gt;
+&lt;p&gt;This website is based on &lt;a href=&quot;https://github.com/alxshelepenok/gatsby-starter-lumen&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Lumen&lt;/a&gt;, a Gatsby starter blog with a
+minimalistic and pleasing design. It does not support a dark mode out of the box, making its implementation an
+interesting learning experience. It also seems to be a &lt;a href=&quot;https://github.com/alxshelepenok/gatsby-starter-lumen/issues/688&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;request&lt;/a&gt;
+from people using the starter blog, so it’s a good opportunity to help out. &lt;/p&gt;
+&lt;p&gt;After some research — figuring out the quality of developer blog posts has become a skill in itself — I had a few good
+ideas on how to do this. Ananya’s article&lt;sup id=&quot;fnref-2&quot;&gt;&lt;a href=&quot;#fn-2&quot; class=&quot;footnote-ref&quot;&gt;2&lt;/a&gt;&lt;/sup&gt; on dev.to was a great starting point, especially since most other articles
+don’t suggest CSS custom properties (also called variables) for implementing dark mode. &lt;/p&gt;
+&lt;p&gt;The most common approach seems to be defining an alternative dark mode global &lt;code class=&quot;language-text&quot;&gt;&amp;lt;body&amp;gt;&lt;/code&gt; class and using Javascript
+before the body renders to edit its class to the dark mode explicitly. Since Lumen already makes use of Sass, I went
+with a mixed approach, keeping Sass variables in the different components and assigning to them the CSS custom
+properties. &lt;/p&gt;
+&lt;p&gt;This has its drawbacks too, as we can’t use Sass color module functions, but the very limited number of colors and page
+types of the template allows for pre-setting all the colors we will use. It also has its benefits, since we can
+directly use &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;CSS attribute selectors&lt;/a&gt; and
+HMTL5’s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;data-* global attributes&lt;/a&gt;. We can
+use an attribute selector dependent on our data-* attribute, changing the color variables depending on which &lt;code class=&quot;language-text&quot;&gt;theme&lt;/code&gt;
+data attribute we select.&lt;/p&gt;
+&lt;h2 id=&quot;media-queries-and-setting-a-mode&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#media-queries-and-setting-a-mode&quot; aria-label=&quot;media queries and setting a mode permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Media queries and setting a mode&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Media Queries allow authors to test and query values or features of the user agent or display device, independent of
+the document being rendered. They are used in the CSS @media rule to conditionally apply styles to a document, and in
+various other contexts and languages, such as HTML and JavaScript.&lt;/p&gt;
+&lt;p&gt;— &lt;a href=&quot;https://drafts.csswg.org/mediaqueries-5/#prefers-color-scheme&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Media Queries Level 5 specification&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We’re connecting another recent feature of CSS formatting, media queries and, more specifically, the &lt;code class=&quot;language-text&quot;&gt;prefers-color-scheme&lt;/code&gt;
+media query that informs the browser of the client’s OS dark/light mode preference. With this I can infer the reader’s
+preference for a dark or light mode and use that preference to style the page accordingly. &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; mql &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; window&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;matchMedia&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;(prefers-color-scheme: dark)&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; hasMediaQueryPreference &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;typeof&lt;/span&gt; mql&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;matches &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;boolean&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hasMediaQueryPreference &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; mql&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;matches &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;documentElement&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dataset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;theme &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;dark&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;documentElement&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dataset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;theme &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;light&apos;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;mql&lt;/code&gt; should hold a boolean, indicating if the user’s OS color preference is dark mode. Like I mentioned before, I’m
+using data-* attributes, which means that we can use the &lt;code class=&quot;language-text&quot;&gt;dataset&lt;/code&gt; object of &lt;code class=&quot;language-text&quot;&gt;documentElement&lt;/code&gt;. Subsequently, I set my
+alternative CSS selector to use these data-* attribute:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sass&quot;&gt;&lt;pre class=&quot;language-sass&quot;&gt;&lt;code class=&quot;language-sass&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Colors, using css variables&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token property&quot;&gt;root&lt;/span&gt; {&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// Based on One Light: https://github.com/atom/one-light-syntax/blob/master/styles/colors.less&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--bg-color&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; rgb(231, 230, 223);&lt;/span&gt;
+
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--base&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; rgb(11, 23, 82);&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--primary&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; rgb(134, 69, 28);&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--secondary&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; rgba(11, 23, 82, 70&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--gray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(230, 23&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 23&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--gray-border&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(230, 77&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 13&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;token selector&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token selector&quot;&gt;[data-theme=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;dark&quot;&lt;/span&gt;&lt;span class=&quot;token selector&quot;&gt;] {&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// Based on One Dark: https://github.com/atom/atom/blob/master/packages/one-dark-syntax/styles/colors.less&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--bg-color&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(220, 13&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 18&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--base&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(219, 14&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 71&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;); &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; mono-1&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--primary&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl( 29, 54&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 61&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;); &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; orange-1&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--secondary&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(220, 9&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 55&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;); &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; mono-2&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--gray-border&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(220, 10&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 40&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;); &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; mono-3&lt;/span&gt;
+&lt;span class=&quot;token property-line&quot;&gt;  &lt;span class=&quot;token property&quot;&gt;--gray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; hsl(0, 0&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;, 100&lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;); &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; white&lt;/span&gt;
+&lt;span class=&quot;token selector&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As discussed before, depending on the root data attribute, the page will either display the default CSS colors, or the
+dark mode colors.&lt;/p&gt;
+&lt;h2 id=&quot;flash-of-unstyled-content&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#flash-of-unstyled-content&quot; aria-label=&quot;flash of unstyled content permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Flash of Unstyled Content&lt;/h2&gt;
+&lt;p&gt;The &lt;a href=&quot;https://web.archive.org/web/20150513055019/http://www.bluerobot.com/web/css/fouc.asp/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;flash of unstyled content (FOUC)&lt;/a&gt;
+is a fairly annoying consequence of sequential DOM building, where a browser will display
+HTML without having fully loaded its CSS. It is especially noticeable on dark/light mode pages when the default flashing
+page mode is different from the expected OS color mode, and getting around this issue is fairly easy with Gatsby.&lt;/p&gt;
+&lt;p&gt;In order to avoid this we’ll load and set the preferred media mode (dark or light) using Gatsby’s &lt;code class=&quot;language-text&quot;&gt;setPreBodyComponents&lt;/code&gt;
+function in its server side render options. When using this specific starter blog, editing the &lt;code class=&quot;language-text&quot;&gt;gatsby/on-render-body.js&lt;/code&gt;
+file is where these changes should be placed, since this file is referenced by the Gatsby server side rendering file, &lt;code class=&quot;language-text&quot;&gt;gastby-ssr.js&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; applyDarkModeFunc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;
+(function() {
+  const mode = localStorage.getItem(&apos;theme&apos;);
+  if (mode !== null &amp;amp;&amp;amp; [&apos;light&apos;, &apos;dark&apos;].includes(mode)) {
+    document.documentElement.dataset.theme = mode;
+    return;
+  }
+
+  const mql = window.matchMedia(&apos;(prefers-color-scheme: dark)&apos;);
+  const hasMediaQueryPreference = typeof mql.matches === &apos;boolean&apos;;
+  if (hasMediaQueryPreference &amp;amp;&amp;amp; mql.matches === true) {
+    document.documentElement.dataset.theme = &apos;dark&apos;;
+  } else {
+    document.documentElement.dataset.theme = &apos;light&apos;
+  }
+})();
+&lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;onRenderBody&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; setPreBodyComponents &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token function&quot;&gt;setPreBodyComponents&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+    React&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;script&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      dangerouslySetInnerHTML&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        __html&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; applyDarkModeFunc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As you can see, before drawing the page body we check for a stored preference in localStorage and return if there is one.
+If not, we check the OS’s preferred color scheme and set te page theme accordingly.&lt;/p&gt;
+&lt;h2 id=&quot;react-hooks-and-toggler&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#react-hooks-and-toggler&quot; aria-label=&quot;react hooks and toggler permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;React Hooks and Toggler&lt;/h2&gt;
+&lt;p&gt;Finally, we need to create a button to change between dark and light mode. For this we’re using React’s functional
+programming hooks, making use of &lt;code class=&quot;language-text&quot;&gt;useState&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;useEffect&lt;/code&gt;. The first will be used to create a theme state variable and
+setter. Using this theme variable, we’ll register it as a dependency of the useEffect-triggered function, which will be
+run whenever the theme changes.&lt;/p&gt;
+&lt;p&gt;Whenever the button is pressed and the &lt;code class=&quot;language-text&quot;&gt;toggleTheme&lt;/code&gt; function runs, the &lt;code class=&quot;language-text&quot;&gt;theme&lt;/code&gt; variable is changed to the appropriate
+new value by triggering our anonymous function:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; React&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; useState&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; useEffect &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;react&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; styles &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;./DarkModeToggler.module.scss&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ThemeToggler&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; initTheme &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;documentElement&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dataset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;theme&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;theme&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; setTheme&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;initTheme&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token function&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    localStorage&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setItem&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;theme&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; theme&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;documentElement&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dataset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;theme &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; theme&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;theme&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;toggleTheme&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; newTheme &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; theme &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;dark&apos;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;light&apos;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;dark&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;setTheme&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;newTheme&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;div className&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;styles&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;toggler&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;label&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+        &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;input
+          type&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;checkbox&quot;&lt;/span&gt;
+          onClick&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;toggleTheme&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          hidden&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;${&lt;/span&gt;theme&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; mode&lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;label&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;div&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;default&lt;/span&gt; ThemeToggler&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;finishing-steps&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#finishing-steps&quot; aria-label=&quot;finishing steps permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Finishing steps&lt;/h2&gt;
+&lt;p&gt;With all of this in place we are pretty much done! Small details like the medium-style zoom provided by
+&lt;code class=&quot;language-text&quot;&gt;gatsby-remark-images-medium-zoom&lt;/code&gt; can be configured in the &lt;code class=&quot;language-text&quot;&gt;gatsby-config.js&lt;/code&gt; page. I’d recommend using a CSS attribute
+(as a string) as the backgroung option, which will make it work with the dark/light mode settings too!&lt;/p&gt;
+&lt;p&gt;This is all I needed to do to make this work, feel free to replicate and modify it if you’re looking for the same
+functionality. I don’t have any comments section on this blog (on purpose), so feel free to open an issue on this page’s
+repo or message me through LinkedIn.&lt;/p&gt;
+&lt;h3 id=&quot;post-script-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#post-script-1&quot; aria-label=&quot;post script 1 permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Post Script 1&lt;/h3&gt;
+&lt;p&gt;While building and deploying I found a issue with SSR and the React component I built. The issue is that the browser DOM
+methods aren’t available when building on server side, but following
+&lt;a href=&quot;https://www.gatsbyjs.com/docs/using-client-side-only-packages/#workaround-4-use-reactlazy-and-suspense-on-client-side-only&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Gatsby’s documentation&lt;/a&gt;
+we can work around the problem. To not have to add another dependency I decided to use React component lazy loading
+and check for the availability of the DOM methods, following the workaround 4 in the linked page.&lt;/p&gt;
+&lt;p&gt;These changes were introduced in the component that loads that offending component, &lt;code class=&quot;language-text&quot;&gt;Sidebar.js&lt;/code&gt;, and building now works
+correctly, as well as in development mode.&lt;/p&gt;
+
+      &lt;div class=&quot;footnotes&quot;&gt;
+        &lt;hr/&gt;&lt;strong&gt;Footnotes:&lt;/strong&gt;
+        &lt;ol &gt;
+    
+    &lt;li class=&quot;footnote-list-item&quot; id=&quot;fn-1&quot; &gt;
+          
+        &lt;p class=&quot;footnote-paragraph&quot; style=&quot;display:inline; &quot;&gt;The code is still available under the &lt;a href=&quot;https://github.com/joaommartins/joaommartins.github.io/tree/gh-page-staticjinja-based&quot;&gt;gh-page-staticjinja-based&lt;/a&gt; branch backing this repo.&lt;/p&gt;
+      &lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot; style=&quot;display:inline;text-decoration: none;&quot;&gt;
+        ^
+      &lt;/a&gt;
+    
+      &lt;/li&gt;
+      
+    
+
+    &lt;li class=&quot;footnote-list-item&quot; id=&quot;fn-2&quot; &gt;
+          
+        &lt;p class=&quot;footnote-paragraph&quot; style=&quot;display:inline; &quot;&gt;&lt;a href=&quot;https://dev.to/ananyaneogi/create-a-dark-light-mode-switch-with-css-variables-34l8&quot;&gt;Article&lt;/a&gt; by Ananya Neogi.&lt;/p&gt;
+      &lt;a href=&quot;#fnref-2&quot; class=&quot;footnote-backref&quot; style=&quot;display:inline;text-decoration: none;&quot;&gt;
+        ^
+      &lt;/a&gt;
+    
+      &lt;/li&gt;
+      
+    &lt;/ol&gt;&lt;/div&gt;</content:encoded></item></channel></rss>
