@@ -6,7 +6,6 @@ module.exports = {
   copyright: '© All rights reserved.',
   disqusShortname: '',
   postsPerPage: 4,
-  googleAnalyticsId: '',
   useKatex: false,
   menu: [
     {
@@ -18,8 +17,8 @@ module.exports = {
       path: '/pages/about'
     },
     {
-      label: 'Contact me',
-      path: '/pages/contacts'
+      label: 'Research',
+      path: '/pages/research'
     }
   ],
   author: {

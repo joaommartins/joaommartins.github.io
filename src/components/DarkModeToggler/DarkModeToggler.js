@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styles from './DarkModeToggler.module.scss';
 
 function ThemeToggler() {
-  // const initTheme = document.documentElement.getAttribute('data-theme');
   const initTheme = document.documentElement.dataset.theme;
   const [theme, setTheme] = useState(initTheme);
 
@@ -13,8 +12,7 @@ function ThemeToggler() {
   [theme]);
 
   function toggleTheme() {
-    const oldTheme = document.documentElement.dataset.theme;
-    const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
   }
 

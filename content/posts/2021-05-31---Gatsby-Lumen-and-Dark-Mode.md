@@ -1,6 +1,6 @@
 ---
 title: Gatsby, Lumen and Dark Mode
-date: "2021-04-15T23:04:37.121Z"
+date: "2021-05-31T20:04:37.121Z"
 template: "post"
 draft: false
 slug: "gatsby-lumen-and-dark-mode"
@@ -39,12 +39,13 @@ Gatsby, an open source static site generator with good Markdown support.
 ## Making it mine
 I have always had an obsessive relationship with tinkering and making my digital experiences as close to my liking as
 possible. A good example is [Dark Reader](https://darkreader.org/), an open source browser extension that _"inverts brightness 
-of web pages and aims to reduce eyestrain while you browse the web"_, which I currently use to handle pages that don't 
+of web pages and aims to reduce eyestrain while you browse the web"_, which I currently use for handling pages that don't 
 offer a native dark mode.
 
 This website is based on [Lumen](https://github.com/alxshelepenok/gatsby-starter-lumen), a Gatsby starter blog with a 
-minimalistic and pleasing design. Out of the box, it does not support a dark mode, making its implementation an 
-interesting learning experience.
+minimalistic and pleasing design. It does not support a dark mode out of the box, making its implementation an 
+interesting learning experience. It also seems to be a [request](https://github.com/alxshelepenok/gatsby-starter-lumen/issues/688) 
+from people using the starter blog, so it's a good opportunity to help out. 
 
 After some research — figuring out the quality of developer blog posts has become a skill in itself — I had a few good 
 ideas on how to do this. Ananya's article[^2] on dev.to was a great starting point, especially since most other articles
@@ -112,7 +113,7 @@ alternative CSS selector to use these data-* attribute:
 }
 ```
 
-As discussed before, depending on the root data attribute, the page will either display the default CSS colors or the 
+As discussed before, depending on the root data attribute, the page will either display the default CSS colors, or the 
 dark mode colors.
 
 
@@ -122,6 +123,97 @@ is a fairly annoying consequence of sequential DOM building, where a browser wil
 HTML without having fully loaded its CSS. It is especially noticeable on dark/light mode pages when the default flashing 
 page mode is different from the expected OS color mode, and getting around this issue is fairly easy with Gatsby.
 
+In order to avoid this we'll load and set the preferred media mode (dark or light) using Gatsby's `setPreBodyComponents`
+ function in its server side render options. When using this specific starter blog, editing the `gatsby/on-render-body.js` 
+file is where these changes should be placed, since this file is referenced by the Gatsby server side rendering file, `gastby-ssr.js`.
+
+```javascript
+const applyDarkModeFunc = `
+(function() {
+  const mode = localStorage.getItem('theme');
+  if (mode !== null && ['light', 'dark'].includes(mode)) {
+    document.documentElement.dataset.theme = mode;
+    return;
+  }
+
+  const mql = window.matchMedia('(prefers-color-scheme: dark)');
+  const hasMediaQueryPreference = typeof mql.matches === 'boolean';
+  if (hasMediaQueryPreference && mql.matches === true) {
+    document.documentElement.dataset.theme = 'dark';
+  } else {
+    document.documentElement.dataset.theme = 'light'
+  }
+})();
+`;
+
+const onRenderBody = ({ setPreBodyComponents }) => {
+  setPreBodyComponents([
+    React.createElement('script', {
+      dangerouslySetInnerHTML: {
+        __html: applyDarkModeFunc,
+      },
+    }),
+  ]);
+};
+
+```
+
+As you can see, before drawing the page body we check for a stored preference in localStorage and return if there is one. 
+If not, we check the OS's preferred color scheme and set te page theme accordingly.
+
+## React Hooks and Toggler
+
+Finally, we need to create a button to change between dark and light mode. For this we're using React's functional
+programming hooks, making use of `useState` and `useEffect`. The first will be used to create a theme state variable and 
+setter. Using this theme variable, we'll register it as a dependency of the useEffect-triggered function, which will be 
+run whenever the theme changes.
+
+Whenever the button is pressed and the `toggleTheme` function runs, the `theme` variable is changed to the appropriate 
+new value by triggering our anonymous function:
+
+```javascript
+import React, { useState, useEffect } from 'react';
+import styles from './DarkModeToggler.module.scss';
+
+function ThemeToggler() {
+  const initTheme = document.documentElement.dataset.theme;
+  const [theme, setTheme] = useState(initTheme);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.documentElement.dataset.theme = theme;
+  },
+  [theme]);
+
+  function toggleTheme() {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+  }
+
+  return (
+    <div className={styles['toggler']}>
+      <label>
+        <input
+          type="checkbox"
+          onClick={() => toggleTheme()}
+          hidden={true}
+        />{`${theme} mode`}
+      </label>
+    </div>
+  );
+}
+
+export default ThemeToggler;
+```
+
+## Finishing steps
+With all of this in place we are pretty much done! Small details like the medium-style zoom provided by 
+`gatsby-remark-images-medium-zoom` can be configured in the `gatsby-config.js` page. I'd recommend using a CSS attribute
+(as a string) as the backgroung option, which will make it work with the dark/light mode settings too!
+
+This is all I needed to do to make this work, feel free to replicate and modify it if you're looking for the same 
+functionality. I don't have any comments section on this blog (on purpose), so feel free to open an issue on this page's
+repo or message me through LinkedIn.
 
 
 [^1]:
