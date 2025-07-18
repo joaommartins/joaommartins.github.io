@@ -1,7 +1,6 @@
 ---
 title: Routing Docker Containers Through a WireGuard VPN Container with Kill Switch
-date: "2025-07-18T23:46:37.121Z"
-template: "post"
+date: "2025-07-18T14:11:37.121Z"
 draft: false
 slug: "wireguard-docker-killswitch"
 category: "Networking"
