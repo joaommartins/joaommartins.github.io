@@ -1,6 +1,6 @@
 ---
 title: Routing Docker Containers Through a WireGuard VPN Container with Kill Switch
-date: "2022-09-09T20:04:37.121Z"
+date: "2025-07-18T23:46:37.121Z"
 template: "post"
 draft: false
 slug: "wireguard-docker-killswitch"
@@ -10,8 +10,12 @@ tags:
 - "WireGuard"
 - "VPN"
 description: "How to route your docker containers' traffic through a WireGuard container, with a kill switch."
-socialImage: "/media/wireguard_logo.png"
+socialImage: "/wireguard_logo.png"
 ---
+
+> **TL;DR** If you don’t feel like reading my ramblings, the Github repository with the final state of the
+> `docker-compose.yaml` file, as well as the necessary configuration files can be found
+> [here](https://github.com/joaommartins/wireguard-network-stack).
 
 If you're anything like me, you like to tinker with everything technology-related. You're also weary of fingerprinting
 and tracking of your online habits, and would like to set up a way of routing your self-hosted services like PiHole
@@ -20,7 +24,7 @@ you've come to the right place.
 
 ## Containers
 
-Containers, in this context, are used as a reference to any containerization platform that perform OS-level
+Containers, in this context, are used as a reference to any containerization platform that performs OS-level
 virtualization through multiple userspace container instances. The benefit of using containers is that we are able
 to encapsulate the software and its dependencies into a single package that can then be deployed in different
 environments. Configuration of these "containers" should be done through files, making a deployment replicable and
@@ -60,8 +64,6 @@ first docker-compose.yaml.
 
 ```yaml
 ### DOCKER-COMPOSE.YAML FILE ###
-version: "3"
-
 services:
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
@@ -78,8 +80,6 @@ services:
       - ${CONFIG_DIR}/wireguard:/config
       - ${CONFIG_DIR}/wireguard_startup:/custom-cont-init.d:ro
       - /lib/modules:/lib/modules
-    ports:
-      - 51820:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
@@ -87,6 +87,7 @@ services:
 
 The variables in the docker-compose.yaml file are saved in the `.env` file, which get automatically used by
 docker-compose:
+
 ```shell
 ### .ENV FILE ###
 
@@ -96,14 +97,15 @@ PGID=1000
 TZ=Australia/Sydney
 
 # ======== directories ========
-CONFIG_DIR=/home/joaommartins/wireguard-stack/configs
+CONFIG_DIR=/home/jmartins/wireguard-stack/configs
 ```
 
 In order to use WireGuard we need to drop a WireGuard configuration file in the container's `/config` folder that we map
 to our `${CONFIG_DIR}/wireguard` folder. Generating this file on Mullvad's website is fairly easy, and in this case we're
 only using an IPv4-only configuration since we want to manually control the ports available from outside the host. The
 generated configuration should look something like this:
-```
+
+```TOML
 [Interface]
 PrivateKey = [REDACTED]
 Address = 10.64.114.74/32
@@ -145,10 +147,12 @@ Generating the wg0.conf file on Mullvad's website allows us to add a kill switch
 are nothing but shell commands that run PostUp and PreDown, `up` and `down` referring to `wg-quick`'s verbs for starting
 and stopping the VPN client connection.
 
-<figure class="float-center">
-	<img src="/media/mullvad_wireguard_killswitch.png" alt="Mullvad WireGuard configuration generation webpage">
-	<figcaption>Mullvad WireGuard configuration generation webpage</figcaption>
-</figure>
+{{< figure
+  src="/mullvad_wireguard_killswitch.png"
+  title="Mullvad WireGuard configuration generation webpage"
+  alt="Mullvad WireGuard configuration generation webpage"
+  width="auto"
+>}}
 
 Creating a WireGuard configuration with a kill switch yields the following file:
 
@@ -211,8 +215,9 @@ PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
 rtt min/avg/max/mdev = 2.657/3.276/3.872/0.496 ms
 ```
 
-Note on DNS resolution vs outbound traffic:
-There is a possibility that you may confuse lack of DNS resolution with blocked outbound traffic if your IP block
+> ### Note on DNS resolution vs outbound traffic
+>
+> There is a possibility that you may confuse lack of DNS resolution with blocked outbound traffic if your IP block
 overlaps with your container network subnet. This is unlikely to happen and that would mean that DNS resolution was
 blocked regardless of iptables rules, but it also means that you may be mistaken on the state of your container network
 rules. This could, for example, allow through traffic that does not depend on DNS, like say a peer-to-peer connection.
@@ -251,9 +256,9 @@ ping: sendmsg: Operation not permitted
 A less curious/paranoid person would at this point be happy with the kill switch functionality. However, I am neither of
 those. Since the kill switch depends on a successful parsing of the wireguard configuration file, an issue presents itself
 with the way the container handles failure. In short, if there are any issues parsing the configuration file, the
-container will not connect to the VPN server and continue allowing outbound network calls to flow through. *Silently.*
+container will not connect to the VPN server and continue allowing outbound network calls to flow through. _Silently._
 
-In a borrowed term from mechanical engineering into application/network security, we call this a case of _fail open_,
+In a borrowed term from mechanical engineering into application/network security, this is a case of _fail open_,
 where a failure on startup will lead to a permissive state. If we purposely create this error, we can see the issue.
 
 ```shell
@@ -271,6 +276,7 @@ Endpoint = 89.44.10.178:51820
 ```
 
 Docker log of the container startup:
+
 ```shell
 ...
 wireguard  | Warning: `/config/wg0.conf' is world accessible
@@ -302,7 +308,7 @@ iptables -I OUTPUT ! -o wg0 -m mark ! --mark 0xca6c -m addrtype ! --dst-type LOC
 ip6tables -I OUTPUT ! -o wg0 -m mark ! --mark 0xca6c -m addrtype ! --dst-type LOCAL -j REJECT
 ```
 
-`wg-quick` automatically adds a mark on all encrypted packets it sends[^1], with the value of this mark being the port it
+`wg-quick` automatically adds a mark on all encrypted packets it sends[^default-firewall], with the value of this mark being the port it
 is configured to connect through. If you use the default 51820 port, then the iptables rules matching 0xca6c will work,
 as this is the hexadecimal representation of decimal 51820. If you use any other port, then you must change this script
 to the correct hexadecimal value, and if you forget to do this, no traffic will be allowed to flow outbound from the
@@ -325,15 +331,136 @@ ping: sendmsg: Operation not permitted
 3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2032ms
 ```
 
+> Note: In the default Mullvad wireguard configuration, the packet mark is obtained by running `wg show %i fwmark`, where
+> `%i` is the wireguard interface name as expanded in `wg-quick`[^wg-quick]. This won't work here, as the startup script
+> will run before the wireguard interface is created, and thus we instead hardcode the mark to `0xca6c` instead, ensuring
+> that, regardless of the wireguard connection state, only packets marked with `0xca6c` will be allowed to egress.
 
 ## VPN consumers
 
 Now that we have the container ready and we're correctly stopping requests we don't want to proceed, we can configure
 other containerised images that we will route through the VPN container exclusively. This will both route all their
 network requests through the WireGuard container as well as make them subject to its outbound network rules containing
-the kill switch.
+the kill switch. For this, we'll use `docker-compose`'s `network_mode`[^network-mode] option, as suggested in this
+Linuxserver.io article[^linuxserver-wireguard], allowing a container to make use of a different container's network
+stack, in this case the WireGuard container.
 
+As an example consumer application, we're using here the `thespeedtest-tracker`, which will periodically, every ten
+minutes, run a speed test in its network interface and store the result. Since we're forcing the container to use the
+`wireguard` container's network stack, its `iptables` rules will apply and all traffic will flow through the wireguard
+interface.
 
+```yaml
+### DOCKER-COMPOSE.YAML FILE ###
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    hostname: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/wireguard:/config
+      - ${CONFIG_DIR}/wireguard_startup:/custom-cont-init.d:ro
+      - /lib/modules:/lib/modules
+    ports:
+      - 8080:80
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    healthcheck:
+      test: ping -c 1 1.1.1.1 || exit 1
+      interval: 2s
+      start_period: 10s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    restart: unless-stopped
+    container_name: speedtest-tracker
+    network_mode: service:wireguard
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=sqlite
+      - SPEEDTEST_SCHEDULE="*/10 * * * *"
+      - DISPLAY_TIMEZONE=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/speedtest-tracker:/config
+    healthcheck:
+      test: curl -fSs http://localhost/api/healthcheck | jq -r .message || exit 1
+      interval: 10s
+      retries: 3
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      wireguard:
+        condition: service_healthy
+```
 
-[^1]:
-[Article](https://www.procustodibus.com/blog/2022/01/wg-quick-firewall-rules/)
+As you may notice, since the network is managed by the  `wireguard` container, in order to expose the port that
+`speedtest-tracker` serves its web interface in, port 80, this port forward needs to be controlled on the `wireguard`
+ports directive instead. Here, we've decided to port forward that port to port 8080, which we'll use to access the
+`speedtest-tracker` web UI.
+
+Finally, like described on the linuxserver.io guide[^linuxserver-wireguard]:
+
+> But it doesn't end there. Even though the port is mapped, once the tunnel is up, it won't respond to any requests
+> coming from the host as it's configured to send all outgoing connections through the tunnel.
+
+This means we need to add the routing rules to allow the host to access the container's web interface. In the article,
+this is done as part of the `wg-quick` configuration file, but since we are using a shell script to set the kill switch
+rules, we can add the routing rules there as well. The following lines will allow the host to access the
+`speedtest-tracker` web interface:
+
+```bash
+#!/bin/bash
+set -e
+
+echo "**** Adding iptables rules ****"
+
+HOMENET=192.168.0.0/16
+HOMENET2=10.0.0.0/8
+HOMENET3=172.16.0.0/12
+iptables -I OUTPUT -d $HOMENET -j ACCEPT
+iptables -A OUTPUT -d $HOMENET2 -j ACCEPT
+iptables -A OUTPUT -d $HOMENET3 -j ACCEPT
+
+# Kill switch
+iptables -A OUTPUT ! -o wg0 -m mark ! --mark 0xca6c -m addrtype ! --dst-type LOCAL -j REJECT
+ip6tables -I OUTPUT ! -o wg0 -m mark ! --mark 0xca6c -m addrtype ! --dst-type LOCAL -j REJECT
+
+echo "**** Successfully added iptables rules ****"
+
+```
+
+Here, the various `HOMENET`s are the local network IP ranges usually used in home networks, as defined in RFC-1918[^rfc1918].
+We add the iptables rules to allow traffic to flow out to the local network, including the web UI of the `speedtest-tracker`
+container, which is now accessible at `http://localhost:8080`.
+
+## Conclusion
+
+In this article, we have seen how to set up a WireGuard VPN container that can be used as a kill switch for other
+containers. We have also seen how to set up a consumer container that uses the WireGuard container's network stack and
+how to expose its web interface to the host. The kill switch is implemented using iptables rules that block all
+outbound traffic unless it is going through the WireGuard interface, and we have ensured that the system fails
+closed by decoupling the kill switch from the WireGuard connection setup.
+
+This was never intended to be a series of articles, but since it took me so long to finally write it down, my local wireguard
+stack has evolved quite a bit, including running the WireGuard container as both a client and a server, allowing clients
+to connect to it over the internet, routing their traffic through the Mullvad VPN connection and giving access to the
+containers running on the host. Expect a follow-up article on this topic in the future.
+
+[^wg-quick]: [wg-quick manpage](https://manpages.debian.org/unstable/wireguard-tools/wg-quick.8.en.html)
+[^linuxserver-wireguard]: [Linuxserver.io Wireguard guide](https://www.linuxserver.io/blog/routing-docker-host-and-container-traffic-through-wireguard#setting-up-a-container-to-use-the-wireguard-containers-network-s)
+[^default-firewall]: [Wg-quick Default Firewall Rules](https://www.procustodibus.com/blog/2022/01/wg-quick-firewall-rules/)
+[^network-mode]: [Docker compose `network_mode` docs](https://docs.docker.com/reference/compose-file/services/#network_mode)
+[^rfc1918]: [RFC-1918](www.rfc-editor.org/rfc/rfc1918)
