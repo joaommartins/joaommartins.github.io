@@ -106,15 +106,16 @@ peer configs will route _all_ client traffic through the tunnel, not just traffi
 probably want when your private keys are involved.
 
 On first run, the image generates a server configuration in `/config/wg_confs/wg0.conf` along with peer configurations
-in `/config/peer_laptop/`, `/config/peer_phone/`, and so on. We need to modify the generated server config to add
-forwarding and NAT rules that will route peer traffic through the Mullvad tunnel:
+in `/config/peer_laptop/`, `/config/peer_phone/`, and so on. The generated config needs forwarding and NAT rules to
+route peer traffic through the Mullvad tunnel. Rather than editing `wg0.conf` by hand every time the image regenerates
+it, our startup script (covered below) patches it automatically. The result looks like this:
 
 ```ini
 [Interface]
 Address = 10.0.2.1
 ListenPort = 51820
 PrivateKey = [REDACTED]
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o wg1 -j MASQUERADE
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o wg1 -j MASQUERADE; iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -o eth0 -j MASQUERADE
 FwMark = 51820
 
 [Peer] # peer_laptop
@@ -131,6 +132,8 @@ The `PostUp` directive is the key to the dual-interface setup. When the server i
 1. Allows packet forwarding in both directions through `wg0`, so traffic from peers can be routed through the container.
 2. Masquerades all traffic leaving through `wg1` (the Mullvad tunnel), so peers' outbound internet traffic appears to
    originate from the container's Mullvad VPN address.
+3. Masquerades traffic from the WireGuard subnet (`10.0.2.0/24`) leaving through `eth0` (the Docker bridge interface),
+   so peers can reach services on the local network and other Docker containers.
 
 The `FwMark = 51820` is critical — it marks the server's own encrypted UDP packets with this value. As we'll see when
 we update the kill switch, these marked packets are exempt from the outbound blocking rules, allowing the server to
@@ -178,9 +181,40 @@ With two WireGuard interfaces, the startup script from the previous article need
 `wg1` (the Mullvad tunnel) instead of `wg0`, and we need to handle the client connection startup ourselves since the
 Linuxserver.io image only manages the server interface automatically.
 
+The script also has a new responsibility: patching the generated `wg0.conf` with the custom `PostUp` and `FwMark`
+directives described above. The Linuxserver.io image regenerates `wg0.conf` with a default `PostUp` that only covers
+basic forwarding — it doesn't know about our Mullvad tunnel or LAN access requirements. Rather than manually editing
+the config after each regeneration, the script handles it idempotently on every startup.
+
 ```bash
 #!/bin/bash
-set -e
+
+# Patch wg0.conf with forwarding, NAT, and FwMark if not already present.
+# The Linuxserver.io image generates a bare wg0.conf with a default PostUp
+# that only covers basic forwarding. The dual-interface (client+server) setup
+# needs custom rules for routing through wg1 (Mullvad) and LAN access.
+WG0_CONF="/config/wg_confs/wg0.conf"
+POSTUP='PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o wg1 -j MASQUERADE; iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -o eth0 -j MASQUERADE'
+
+if [ -f "$WG0_CONF" ]; then
+    # Check if our custom PostUp is present (look for wg1 masquerade specifically)
+    if grep -q "POSTROUTING -o wg1" "$WG0_CONF"; then
+        echo "**** wg0.conf: custom PostUp already present ****"
+    elif grep -q "^PostUp" "$WG0_CONF"; then
+        # Default PostUp exists but missing our custom rules — replace it
+        sed -i "s|^PostUp.*|$POSTUP|" "$WG0_CONF"
+        echo "**** Patched wg0.conf: replaced default PostUp with custom rules ****"
+    else
+        # No PostUp at all — insert after PrivateKey
+        sed -i "/^PrivateKey/a\\$POSTUP" "$WG0_CONF"
+        echo "**** Patched wg0.conf: added PostUp ****"
+    fi
+
+    if ! grep -q "^FwMark" "$WG0_CONF"; then
+        sed -i "/^PostUp/a\\FwMark = 51820" "$WG0_CONF"
+        echo "**** Patched wg0.conf: added FwMark ****"
+    fi
+fi
 
 echo "**** Adding iptables rules ****"
 
@@ -188,10 +222,14 @@ DROUTE=$(ip route | grep default | awk '{print $3}')
 HOMENET=192.168.0.0/16
 HOMENET2=10.0.0.0/8
 HOMENET3=172.16.0.0/12
-ip route add $HOMENET3 via $DROUTE
-ip route add $HOMENET2 via $DROUTE
-ip route add $HOMENET via $DROUTE
-iptables -I OUTPUT -d $HOMENET -j ACCEPT
+
+# Add routes for private networks (tolerant of pre-existing routes)
+ip route add $HOMENET3 via $DROUTE 2>/dev/null || true
+ip route add $HOMENET2 via $DROUTE 2>/dev/null || true
+ip route add $HOMENET  via $DROUTE 2>/dev/null || true
+
+# Allow traffic to private networks
+iptables -I OUTPUT -d $HOMENET  -j ACCEPT
 iptables -A OUTPUT -d $HOMENET2 -j ACCEPT
 iptables -A OUTPUT -d $HOMENET3 -j ACCEPT
 
@@ -204,28 +242,35 @@ echo "**** Successfully added iptables rules ****"
 ```
 
 This script runs during container initialisation, before either WireGuard interface is brought
-up[^custom-cont-init]. Compared to the script from the previous article, there are three important changes:
+up[^custom-cont-init]. Compared to the script from the previous article, there are four important changes:
 
-1. **Local network routes**: We add explicit routes for RFC 1918[^rfc1918] private address ranges via the container's
+1. **Automatic `wg0.conf` patching**: The script checks whether the generated server config already has our custom
+   `PostUp` and `FwMark` directives. If the image has regenerated a default config, the script replaces the `PostUp`
+   line and adds `FwMark`. The check is idempotent — if the custom rules are already present, it does nothing. This
+   means you never need to manually edit the generated config, even after adding or removing peers.
+
+2. **Local network routes**: We add explicit routes for RFC 1918[^rfc1918] private address ranges via the container's
    default gateway. Without these, traffic destined for the Docker networks and your home network would attempt to route
    through the VPN tunnel. The corresponding `iptables` rules ensure that outbound traffic to these subnets is always
-   allowed, regardless of the kill switch state.
+   allowed, regardless of the kill switch state. The route additions are tolerant of pre-existing entries — on a
+   container restart, these routes may already exist, so the script suppresses the error rather than failing.
 
-2. **Kill switch targeting `wg1`**: The kill switch rule now references `wg1` instead of `wg0`. It rejects all outbound
+3. **Kill switch targeting `wg1`**: The kill switch rule now references `wg1` instead of `wg0`. It rejects all outbound
    traffic that is _not_ going through the Mullvad tunnel, _not_ marked with `0xca6c` (the hexadecimal representation
    of port 51820), and _not_ destined for a local address. The `FwMark = 51820` we set on the server interface ensures
    its encrypted packets to remote peers are marked and thus exempted — without this, the server wouldn't be able to
    communicate with its clients.
 
-3. **Manual client startup**: We bring up `wg1` ourselves with `wg-quick up`. The Linuxserver.io image handles `wg0`
+4. **Manual client startup**: We bring up `wg1` ourselves with `wg-quick up`. The Linuxserver.io image handles `wg0`
    (the server), but since `wg1` is our custom addition, we need to start it explicitly.
 
 The execution order is then:
 
 1. Container starts, startup script runs.
-2. Kill switch and local network rules are set — outbound internet traffic is now _blocked_.
-3. `wg1` (Mullvad client) is brought up — outbound traffic through the VPN is now _allowed_.
-4. Linuxserver.io image brings up `wg0` (server) — remote peers can now connect.
+2. `wg0.conf` is patched with custom `PostUp` and `FwMark` (if needed).
+3. Kill switch and local network rules are set — outbound internet traffic is now _blocked_.
+4. `wg1` (Mullvad client) is brought up — outbound traffic through the VPN is now _allowed_.
+5. Linuxserver.io image brings up `wg0` (server) with our patched config — remote peers can now connect.
 
 If the startup script fails or the Mullvad connection cannot be established, the kill switch is already in place. _Fail closed._
 
@@ -258,7 +303,7 @@ remote WireGuard peers.
       FTLCONF_dns_upstreams: '1.1.1.1'
       FTLCONF_dns_dnssec: true
       FTLCONF_dns_revServers: 'true,192.168.1.0/24,192.168.1.1,lan'
-      FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1"
+      FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1;server=/proxy/127.0.0.11"
     cap_add:
       - NET_ADMIN
     volumes:
@@ -273,13 +318,22 @@ PiHole is reachable at `10.0.2.1:53` from any connected peer.
 
 The important line here is:
 
-```
-FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1"
+```text
+FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1;server=/proxy/127.0.0.11"
 ```
 
-This dnsmasq directive tells PiHole to resolve _any_ subdomain of `jmartins.dev` to `10.0.2.1`. So when a remote
-client's browser requests `jellyfin.jmartins.dev`, PiHole responds with `10.0.2.1` — the WireGuard tunnel address
-where Traefik is listening. The request stays inside the tunnel the entire way.
+This packs two dnsmasq directives into a single environment variable, separated by a semicolon:
+
+1. `address=/jmartins.dev/10.0.2.1` tells PiHole to resolve _any_ subdomain of `jmartins.dev` to `10.0.2.1`. So when
+   a remote client's browser requests `jellyfin.jmartins.dev`, PiHole responds with `10.0.2.1` — the WireGuard tunnel
+   address where Traefik is listening. The request stays inside the tunnel the entire way.
+
+2. `server=/proxy/127.0.0.11` is a conditional DNS forward. When `wg-quick` brings up the Mullvad client, it overwrites
+   `/etc/resolv.conf` inside the container to point at `127.0.0.1` (PiHole). That's fine for external domains, but
+   Traefik needs to resolve the hostname `proxy` to reach the Docker Socket Proxy at `tcp://proxy:2375`. PiHole doesn't
+   know about Docker container names — only Docker's embedded DNS at `127.0.0.11` does. This directive tells dnsmasq to
+   forward queries for `proxy` specifically to Docker's DNS resolver, while everything else continues through the normal
+   upstream. No DNS leak, no broad forwarding — just the one hostname Traefik needs.
 
 Upstream DNS is set to `1.1.1.1` (Cloudflare), with DNSSEC enabled for good measure. Since all outbound traffic from
 the container exits through the Mullvad VPN, even these upstream DNS queries are encrypted and anonymised.
@@ -535,6 +589,11 @@ services:
       - traefik.http.routers.pihole.service=pihole
       - traefik.http.services.pihole.loadbalancer.server.scheme=http
       - traefik.http.services.pihole.loadbalancer.server.port=${PIHOLE_WEBUI_PORT}
+      ## Traefik dashboard
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`traefik.jmartins.dev`)
+      - traefik.http.routers.traefik.tls.certresolver=letsencrypt
+      - traefik.http.routers.traefik.service=api@internal
       ## Jellyfin
       - traefik.http.routers.jellyfin.entrypoints=websecure
       - traefik.http.routers.jellyfin.rule=Host(`jellyfin.jmartins.dev`)
@@ -564,7 +623,7 @@ services:
       FTLCONF_dns_upstreams: '1.1.1.1'
       FTLCONF_dns_dnssec: true
       FTLCONF_dns_revServers: 'true,192.168.1.0/24,192.168.1.1,lan'
-      FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1"
+      FTLCONF_misc_dnsmasq_lines: "address=/jmartins.dev/10.0.2.1;server=/proxy/127.0.0.11"
     cap_add:
       - NET_ADMIN
     volumes:
@@ -740,7 +799,7 @@ through the VPN. Import this on your device, connect, and let's verify everythin
 
 From the connected laptop:
 
-```
+```shell
 $ curl https://am.i.mullvad.net/connected
 You are connected to Mullvad (server au14-wireguard). Your IP address is 89.44.10.183
 
@@ -762,7 +821,7 @@ serving a valid certificate.
 
 We can also verify the WireGuard container is running both interfaces by `exec`_ing_ into it:
 
-```
+```shell
 root@wireguard:/# wg show
 interface: wg0
   public key: [REDACTED]
@@ -822,3 +881,15 @@ changes, no certificate requests, no client-side configuration.
 [^dns-challenge]: [Let's Encrypt DNS-01 Challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge)
 [^docker-socket-proxy]: [Tecnativa Docker Socket Proxy](https://github.com/Tecnativa/docker-socket-proxy)
 [^ntfy]: [ntfy — Push notifications](https://ntfy.sh/)
+
+---
+
+## Changelog
+
+- **2026-02-26**: Updated the startup script to automatically patch `wg0.conf` with custom `PostUp` and `FwMark`
+  directives, eliminating the need to manually edit the generated config. Added `eth0` masquerade rule to the server's
+  `PostUp` for LAN access from peers. Added tolerant route additions for container restarts. Added conditional DNS
+  forwarding (`server=/proxy/127.0.0.11`) to PiHole's dnsmasq configuration so Traefik can resolve the Docker Socket
+  Proxy hostname after `wg-quick` overwrites `/etc/resolv.conf`. Added Traefik dashboard labels to the full compose
+  example.
+- **2026-02-23**: Initial publication.
